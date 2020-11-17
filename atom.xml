@@ -1,31 +1,246 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://github.com/rannie823/rannie823.github.io.git</id>
-    <title>rannie</title>
-    <updated>2020-11-17T07:04:28.814Z</updated>
+    <title>rannie-前端小码农</title>
+    <updated>2020-11-17T09:13:20.364Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://github.com/rannie823/rannie823.github.io.git"/>
     <link rel="self" href="https://github.com/rannie823/rannie823.github.io.git/atom.xml"/>
-    <subtitle>rannie&apos;s blog</subtitle>
+    <subtitle>一个前端小码农记录踩坑的blog</subtitle>
     <logo>https://github.com/rannie823/rannie823.github.io.git/images/avatar.png</logo>
     <icon>https://github.com/rannie823/rannie823.github.io.git/favicon.ico</icon>
-    <rights>All rights reserved 2020, rannie</rights>
+    <rights>All rights reserved 2020, rannie-前端小码农</rights>
     <entry>
-        <title type="html"><![CDATA[发]]></title>
-        <id>https://github.com/rannie823/rannie823.github.io.git/post/fa/</id>
-        <link href="https://github.com/rannie823/rannie823.github.io.git/post/fa/">
+        <title type="html"><![CDATA[微信小程序-海报-canvas-分享到朋友圈]]></title>
+        <id>https://github.com/rannie823/rannie823.github.io.git/post/wei-xin-xiao-cheng-xu-hai-bao-canvas-fen-xiang-dao-peng-you-quan/</id>
+        <link href="https://github.com/rannie823/rannie823.github.io.git/post/wei-xin-xiao-cheng-xu-hai-bao-canvas-fen-xiang-dao-peng-you-quan/">
         </link>
-        <updated>2020-11-17T06:20:48.000Z</updated>
-        <content type="html"><![CDATA[<p>飞洒发撒</p>
+        <updated>2020-11-17T09:03:12.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="微信小程序分享到朋友圈海报">微信小程序分享到朋友圈海报</h2>
+<p>一、<em>效果图</em><br>
+<img src="https://github.com/rannie823/rannie823.github.io.git/post-images/1605603862594.png" alt="" loading="lazy"><br>
+<em>二、代码</em></p>
+<blockquote>
+<p>index.wxml</p>
+</blockquote>
+<pre><code class="language-html">&lt;canvas canvas-id=&quot;shareCanvas&quot; style=&quot;width:300px;height:450px;&quot; width=&quot;720&quot; height=&quot;1000&quot;&gt;
+		&lt;/canvas&gt;
+</code></pre>
+<blockquote>
+<p>index.js</p>
+</blockquote>
+<pre><code class="language-javascript">Page({
+	data:{
+		shareGoodsImg:'',
+		erCode:'', // 用户扫码二维码可进入小程序
+		goodsPrise:'', // 商品价格
+	},
+	onLoad(){
+		this.createCtx();
+	},
+	// 生成海报
+	createCtx: function () {
+    	var that = this;
+    	// 小程序用户信息（头像，昵称等）
+    	var userInfo = wx.getStorageSync('userData');
+
+    	// 创建画布
+    	const ctx = wx.createCanvasContext()
+
+    	// 白色背景
+    	ctx.setFillStyle('#fff')
+    	ctx.fillRect(0, 0, 300, 450)
+
+    	//分享首图
+   		ctx.drawImage(this.data.shareGoodsImg, 0, 0, 300, 300);
+    	//分享二维码
+    	ctx.drawImage(this.data.erCode, 225, 370, 65, 65);
+    	//用户头像
+    	ctx.drawImage(this.data.avatar, 15, 395, 35, 35);
+
+    	// 昵称
+    	var nick = {
+      		x: 60,
+      		y: 405,
+      		color: '#333333',
+      		size: 12,
+      		align: 'left',
+      		baseline: 'middle',
+      		text: userInfo.nickname + &quot;推荐购买&quot;,
+      		bold: false
+    	}
+    	this.drawText(ctx, nick);
+
+    	// 长按识别
+    	var longPress = {
+      		x: 60,
+      		y: 420,
+      		color: '#333333',
+      		size: 12,
+      		align: 'left',
+      		baseline: 'middle',
+      		text: &quot;长按识别，立即购买&quot;,
+      		bold: false
+    	}
+    	this.drawText(ctx, longPress);
+
+    	// 标题
+    	var length = ctx.measureText(that.data.goodsTitle).width &gt; 270 ? 48 : 130 - ctx.measureText(that.data.goodsTitle).width / 2 // 标题开始的位置
+    	var title = {
+      		x: length,
+      		y: 300,
+      		width: 230,
+      		height: 24,
+      		color: '#000',
+      		size: 16,
+      		line: 2,
+      		align: 'middle',
+      		baseline: 'middle',
+      		text: that.data.goodsTitle,
+      		bold: false
+    	}
+    	this.textWrap(ctx, title);
+
+    	// 价格
+    	var price = {
+      		x: 135 - ctx.measureText(that.data.goodsPrise).width / 2,
+      		y: 300 + that.getTextLine(ctx, title).length * 25,
+      		color: 'red',
+      		size: 18,
+      		align: 'middle',
+      		baseline: 'middle',
+      		text: &quot;￥&quot; + that.data.goodsPrise,
+      		bold: false
+    	}
+    	this.drawText(ctx, price);
+
+    	wx.drawCanvas({
+      	canvasId: 'shareCanvas',
+      	actions: ctx.getActions()
+    })
+
+    wx.hideLoading()
+  },
+   /**
+   * 渲染文字
+   *
+   * @param {Object} obj
+   */
+  drawText: function (ctx, obj) {
+    ctx.save();
+    ctx.setFillStyle(obj.color);
+    ctx.setFontSize(obj.size);
+    ctx.textAlign = obj.align;
+    ctx.setTextBaseline(obj.baseline);
+    if (obj.bold) {
+      ctx.fillText(obj.text, obj.x, obj.y - 0.3);
+      ctx.fillText(obj.text, obj.x - 0.3, obj.y);
+    }
+    ctx.fillText(obj.text, obj.x, obj.y);
+    if (obj.bold) {
+      ctx.fillText(obj.text, obj.x, obj.y + 0.5);
+      ctx.fillText(obj.text, obj.x + 0.5, obj.y);
+    }
+    ctx.restore();
+  },
+
+  /**
+   * 文本换行
+   *
+   * @param {Object} obj
+   */
+  textWrap: function (ctx, obj) {
+    let tr = this.getTextLine(ctx, obj);
+    for (let i = 0; i &lt; tr.length; i++) {
+      if (i &lt; obj.line) {
+        let txt = {
+          x: obj.x,
+          y: obj.y + (i * obj.height),
+          color: obj.color,
+          size: obj.size,
+          align: obj.align,
+          baseline: obj.baseline,
+          text: tr[i],
+          bold: obj.bold
+        };
+        if (i == obj.line - 1) {
+          txt.text = txt.text.substring(0, txt.text.length);
+        }
+        this.drawText(ctx, txt);
+      }
+    }
+  },
+
+  /**
+   * 获取文本折行
+   * @param {Object} obj
+   * @return {Array} arrTr
+   */
+  getTextLine: function (ctx, obj) {
+    ctx.setFontSize(obj.size);
+    let arrText = obj.text.split('');
+    let line = '';
+    let arrTr = [];
+    for (let i = 0; i &lt; arrText.length; i++) {
+      var testLine = line + arrText[i];
+      var metrics = ctx.measureText(testLine);
+      var width = metrics.width;
+      if (width &gt; obj.width &amp;&amp; i &gt; 0) {
+        arrTr.push(line);
+        line = arrText[i];
+      } else {
+        line = testLine;
+      }
+      if (i == arrText.length - 1) {
+        arrTr.push(line);
+      }
+    }
+    return arrTr;
+  },
+
+})
+</code></pre>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[哈哈]]></title>
-        <id>https://github.com/rannie823/rannie823.github.io.git/post/ha-ha/</id>
-        <link href="https://github.com/rannie823/rannie823.github.io.git/post/ha-ha/">
+        <title type="html"><![CDATA[jquery-select2-清除选中状态]]></title>
+        <id>https://github.com/rannie823/rannie823.github.io.git/post/jquery-select2-qing-chu-xuan-zhong-zhuang-tai/</id>
+        <link href="https://github.com/rannie823/rannie823.github.io.git/post/jquery-select2-qing-chu-xuan-zhong-zhuang-tai/">
         </link>
-        <updated>2020-11-17T05:17:39.000Z</updated>
-        <content type="html"><![CDATA[<p>成交价</p>
+        <updated>2020-11-17T09:00:43.000Z</updated>
+        <content type="html"><![CDATA[<pre><code>$('#test').val('').trigger('change');
+或
+$('#test').val(null).trigger('change');
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[echarts-自适应窗口]]></title>
+        <id>https://github.com/rannie823/rannie823.github.io.git/post/echarts-zi-gua-ying-chuang-kou/</id>
+        <link href="https://github.com/rannie823/rannie823.github.io.git/post/echarts-zi-gua-ying-chuang-kou/">
+        </link>
+        <updated>2020-11-17T08:58:33.000Z</updated>
+        <content type="html"><![CDATA[<pre><code>let testEcharts=echarts.init(document.getElementById('testId'));
+window.onresize=function(){
+	testEcharts.resize();
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[echarts-显示不全]]></title>
+        <id>https://github.com/rannie823/rannie823.github.io.git/post/echarts-xian-shi-bu-quan/</id>
+        <link href="https://github.com/rannie823/rannie823.github.io.git/post/echarts-xian-shi-bu-quan/">
+        </link>
+        <updated>2020-11-17T08:56:39.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>页面加载时图表默认是隐藏</strong></p>
+<ul>
+<li>默认不显示</li>
+<li>tab切换默认不显示</li>
+</ul>
+<pre><code>// 页面加载时图表自适应窗口或切换tab时自适应窗口
+let testEcharts=echarts.init(document.getElementById('testId'));
+testEcharts.resize();</code></pre>
 ]]></content>
     </entry>
 </feed>

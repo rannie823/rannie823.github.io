@@ -136,3 +136,43 @@ h2 {
 nav ul.inline li a {
   display: block;
 }
+
+      article .article-title, h2 {
+    font-size: 1rem;
+}
+.navbar{
+    max-width: 1440px;
+    margin: 10px auto;
+    background-color:#f7f7f7;
+}
+button, .paper-btn, [type='button'] {
+    padding: 0.15rem;
+    font-size:16px;
+}
+h3 {
+    font-size: 1.2rem;
+}
+.text-muted {
+    font-size:16px;
+}
+.paper {
+    background-color: #f7f7f7;
+}
+.article{
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px dashed #ccc;
+    margin-bottom:10px;
+}
+.sidebar .sidebar-title {
+    font-size: 16px;
+}
+a{
+   font-size:16px;
+   background-image:none;
+}
+article .text-lead{
+  display:none;
+}
+    

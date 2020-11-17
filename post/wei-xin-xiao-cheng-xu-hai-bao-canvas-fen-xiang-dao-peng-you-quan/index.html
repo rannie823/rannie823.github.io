@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>微信小程序-海报-canvas-分享到朋友圈 | rannie-前端小码农</title>
+<meta name="description" content="一个前端小码农记录踩坑的blog">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://github.com/rannie823/rannie823.github.io.git/favicon.ico?v=1605604387113">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://github.com/rannie823/rannie823.github.io.git/styles/main.css">
+
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://github.com/rannie823/rannie823.github.io.git">rannie-前端小码农</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>微信小程序-海报-canvas-分享到朋友圈</h1>
+            <p class="article-meta">
+              2020-11-17
+              
+                <a href="https://github.com/rannie823/rannie823.github.io.git/tag/R3ZGEN1sD/" class="badge ">
+                  微信小程序
+                </a>
+              
+            </p>
+            
+            <div class="post-content">
+              <h2 id="微信小程序分享到朋友圈海报">微信小程序分享到朋友圈海报</h2>
+<p>一、<em>效果图</em><br>
+<img src="https://github.com/rannie823/rannie823.github.io.git/post-images/1605603862594.png" alt="" loading="lazy"><br>
+<em>二、代码</em></p>
+<blockquote>
+<p>index.wxml</p>
+</blockquote>
+<pre><code class="language-html">&lt;canvas canvas-id=&quot;shareCanvas&quot; style=&quot;width:300px;height:450px;&quot; width=&quot;720&quot; height=&quot;1000&quot;&gt;
+		&lt;/canvas&gt;
+</code></pre>
+<blockquote>
+<p>index.js</p>
+</blockquote>
+<pre><code class="language-javascript">Page({
+	data:{
+		shareGoodsImg:'',
+		erCode:'', // 用户扫码二维码可进入小程序
+		goodsPrise:'', // 商品价格
+	},
+	onLoad(){
+		this.createCtx();
+	},
+	// 生成海报
+	createCtx: function () {
+    	var that = this;
+    	// 小程序用户信息（头像，昵称等）
+    	var userInfo = wx.getStorageSync('userData');
+
+    	// 创建画布
+    	const ctx = wx.createCanvasContext()
+
+    	// 白色背景
+    	ctx.setFillStyle('#fff')
+    	ctx.fillRect(0, 0, 300, 450)
+
+    	//分享首图
+   		ctx.drawImage(this.data.shareGoodsImg, 0, 0, 300, 300);
+    	//分享二维码
+    	ctx.drawImage(this.data.erCode, 225, 370, 65, 65);
+    	//用户头像
+    	ctx.drawImage(this.data.avatar, 15, 395, 35, 35);
+
+    	// 昵称
+    	var nick = {
+      		x: 60,
+      		y: 405,
+      		color: '#333333',
+      		size: 12,
+      		align: 'left',
+      		baseline: 'middle',
+      		text: userInfo.nickname + &quot;推荐购买&quot;,
+      		bold: false
+    	}
+    	this.drawText(ctx, nick);
+
+    	// 长按识别
+    	var longPress = {
+      		x: 60,
+      		y: 420,
+      		color: '#333333',
+      		size: 12,
+      		align: 'left',
+      		baseline: 'middle',
+      		text: &quot;长按识别，立即购买&quot;,
+      		bold: false
+    	}
+    	this.drawText(ctx, longPress);
+
+    	// 标题
+    	var length = ctx.measureText(that.data.goodsTitle).width &gt; 270 ? 48 : 130 - ctx.measureText(that.data.goodsTitle).width / 2 // 标题开始的位置
+    	var title = {
+      		x: length,
+      		y: 300,
+      		width: 230,
+      		height: 24,
+      		color: '#000',
+      		size: 16,
+      		line: 2,
+      		align: 'middle',
+      		baseline: 'middle',
+      		text: that.data.goodsTitle,
+      		bold: false
+    	}
+    	this.textWrap(ctx, title);
+
+    	// 价格
+    	var price = {
+      		x: 135 - ctx.measureText(that.data.goodsPrise).width / 2,
+      		y: 300 + that.getTextLine(ctx, title).length * 25,
+      		color: 'red',
+      		size: 18,
+      		align: 'middle',
+      		baseline: 'middle',
+      		text: &quot;￥&quot; + that.data.goodsPrise,
+      		bold: false
+    	}
+    	this.drawText(ctx, price);
+
+    	wx.drawCanvas({
+      	canvasId: 'shareCanvas',
+      	actions: ctx.getActions()
+    })
+
+    wx.hideLoading()
+  },
+   /**
+   * 渲染文字
+   *
+   * @param {Object} obj
+   */
+  drawText: function (ctx, obj) {
+    ctx.save();
+    ctx.setFillStyle(obj.color);
+    ctx.setFontSize(obj.size);
+    ctx.textAlign = obj.align;
+    ctx.setTextBaseline(obj.baseline);
+    if (obj.bold) {
+      ctx.fillText(obj.text, obj.x, obj.y - 0.3);
+      ctx.fillText(obj.text, obj.x - 0.3, obj.y);
+    }
+    ctx.fillText(obj.text, obj.x, obj.y);
+    if (obj.bold) {
+      ctx.fillText(obj.text, obj.x, obj.y + 0.5);
+      ctx.fillText(obj.text, obj.x + 0.5, obj.y);
+    }
+    ctx.restore();
+  },
+
+  /**
+   * 文本换行
+   *
+   * @param {Object} obj
+   */
+  textWrap: function (ctx, obj) {
+    let tr = this.getTextLine(ctx, obj);
+    for (let i = 0; i &lt; tr.length; i++) {
+      if (i &lt; obj.line) {
+        let txt = {
+          x: obj.x,
+          y: obj.y + (i * obj.height),
+          color: obj.color,
+          size: obj.size,
+          align: obj.align,
+          baseline: obj.baseline,
+          text: tr[i],
+          bold: obj.bold
+        };
+        if (i == obj.line - 1) {
+          txt.text = txt.text.substring(0, txt.text.length);
+        }
+        this.drawText(ctx, txt);
+      }
+    }
+  },
+
+  /**
+   * 获取文本折行
+   * @param {Object} obj
+   * @return {Array} arrTr
+   */
+  getTextLine: function (ctx, obj) {
+    ctx.setFontSize(obj.size);
+    let arrText = obj.text.split('');
+    let line = '';
+    let arrTr = [];
+    for (let i = 0; i &lt; arrText.length; i++) {
+      var testLine = line + arrText[i];
+      var metrics = ctx.measureText(testLine);
+      var width = metrics.width;
+      if (width &gt; obj.width &amp;&amp; i &gt; 0) {
+        arrTr.push(line);
+        line = arrText[i];
+      } else {
+        line = testLine;
+      }
+      if (i == arrText.length - 1) {
+        arrTr.push(line);
+      }
+    }
+    return arrTr;
+  },
+
+})
+</code></pre>
+
+            </div>
+          </article>
+        </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://github.com/rannie823/rannie823.github.io.git/post/jquery-select2-qing-chu-xuan-zhong-zhuang-tai/">
+                <h3 class="post-title">
+                  jquery-select2-清除选中状态
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://github.com/rannie823/rannie823.github.io.git/images/avatar.png?v=1605604387113" class="no-responsive avatar">
+    <div class="text-muted">一个前端小码农记录踩坑的blog</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://github.com/rannie823/rannie823.github.io.git/post/wei-xin-xiao-cheng-xu-hai-bao-canvas-fen-xiang-dao-peng-you-quan/">微信小程序-海报-canvas-分享到朋友圈</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://github.com/rannie823/rannie823.github.io.git/post/jquery-select2-qing-chu-xuan-zhong-zhuang-tai/">jquery-select2-清除选中状态</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://github.com/rannie823/rannie823.github.io.git/post/echarts-zi-gua-ying-chuang-kou/">echarts-自适应窗口</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://github.com/rannie823/rannie823.github.io.git/post/echarts-xian-shi-bu-quan/">echarts-显示不全</a>
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://github.com/rannie823/rannie823.github.io.git/tag/R3ZGEN1sD/" class="badge success">
+          微信小程序
+        </a>
+      
+        <a href="https://github.com/rannie823/rannie823.github.io.git/tag/vdIcutm0O/" class="badge success">
+          jquery
+        </a>
+      
+        <a href="https://github.com/rannie823/rannie823.github.io.git/tag/ee41kO4QB/" class="badge secondary">
+          echarts
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+     | <a class="rss" href="https://github.com/rannie823/rannie823.github.io.git/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+  </body>
+</html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>标签列表 | rannie-前端小码农</title>
+<title>echarts-自适应窗口 | rannie-前端小码农</title>
 <meta name="description" content="一个前端小码农记录踩坑的blog">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -23,6 +23,7 @@
 
   </head>
   <body>
+  
     <nav class="navbar border fixed split-nav">
   <div class="nav-brand">
     <h3><a href="https://github.com/rannie823/rannie823.github.io.git">rannie-前端小码农</a></h3>
@@ -47,24 +48,44 @@
     <div id="top" class="row site">
       <div class="sm-12 md-8 col">
         <div class="paper">
-          <h2 class="tag-list-title">标签列表</h2>
-          <div class="row tags-container">
+          <article class="article">
+            <h1>echarts-自适应窗口</h1>
+            <p class="article-meta">
+              2020-11-17
+              
+                <a href="https://github.com/rannie823/rannie823.github.io.git/tag/ee41kO4QB/" class="badge secondary">
+                  echarts
+                </a>
+              
+            </p>
             
-              <a href="https://github.com/rannie823/rannie823.github.io.git/tag/R3ZGEN1sD/" class="badge success">
-                微信小程序
-              </a>
-            
-              <a href="https://github.com/rannie823/rannie823.github.io.git/tag/vdIcutm0O/" class="badge success">
-                jquery
-              </a>
-            
-              <a href="https://github.com/rannie823/rannie823.github.io.git/tag/ee41kO4QB/" class="badge secondary">
-                echarts
-              </a>
-            
-          </div>
+            <div class="post-content">
+              <pre><code>let testEcharts=echarts.init(document.getElementById('testId'));
+window.onresize=function(){
+	testEcharts.resize();
+}
+</code></pre>
+
+            </div>
+          </article>
         </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://github.com/rannie823/rannie823.github.io.git/post/echarts-xian-shi-bu-quan/">
+                <h3 class="post-title">
+                  echarts-显示不全
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
       </div>
+
       <div class="sm-12 md-4 col sidebar">
   <div class="paper info-container">
     <img src="https://github.com/rannie823/rannie823.github.io.git/images/avatar.png?v=1605604387113" class="no-responsive avatar">
@@ -123,7 +144,7 @@
     </div>
     <div class="row">
       
-        <a href="https://github.com/rannie823/rannie823.github.io.git/tag/R3ZGEN1sD/" class="badge secondary">
+        <a href="https://github.com/rannie823/rannie823.github.io.git/tag/R3ZGEN1sD/" class="badge warning">
           微信小程序
         </a>
       
@@ -131,7 +152,7 @@
           jquery
         </a>
       
-        <a href="https://github.com/rannie823/rannie823.github.io.git/tag/ee41kO4QB/" class="badge success">
+        <a href="https://github.com/rannie823/rannie823.github.io.git/tag/ee41kO4QB/" class="badge warning">
           echarts
         </a>
       
@@ -141,7 +162,8 @@
      | <a class="rss" href="https://github.com/rannie823/rannie823.github.io.git/atom.xml" target="_blank">RSS</a>
   </div>
 </div>
-  
+
+
     </div>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
