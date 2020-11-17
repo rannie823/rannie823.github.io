@@ -175,4 +175,13 @@ a{
 article .text-lead{
   display:none;
 }
+h1{
+  font-size:2rem;
+}
+.next{
+  font-size:16px;
+}
+.post-title{
+  font-size:16px;
+}
     
