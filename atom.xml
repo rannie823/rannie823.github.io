@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://github.com/rannie823/rannie823.github.io.git</id>
-    <title>Gridea</title>
-    <updated>2020-11-17T05:50:34.819Z</updated>
+    <title>rannie</title>
+    <updated>2020-11-17T06:34:17.161Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://github.com/rannie823/rannie823.github.io.git"/>
     <link rel="self" href="https://github.com/rannie823/rannie823.github.io.git/atom.xml"/>
-    <subtitle>温故而知新</subtitle>
+    <subtitle>rannie&apos;s blog</subtitle>
     <logo>https://github.com/rannie823/rannie823.github.io.git/images/avatar.png</logo>
     <icon>https://github.com/rannie823/rannie823.github.io.git/favicon.ico</icon>
-    <rights>All rights reserved 2020, Gridea</rights>
+    <rights>All rights reserved 2020, rannie</rights>
+    <entry>
+        <title type="html"><![CDATA[发]]></title>
+        <id>https://github.com/rannie823/rannie823.github.io.git/post/fa/</id>
+        <link href="https://github.com/rannie823/rannie823.github.io.git/post/fa/">
+        </link>
+        <updated>2020-11-17T06:20:48.000Z</updated>
+        <content type="html"><![CDATA[<p>飞洒发撒</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[哈哈]]></title>
         <id>https://github.com/rannie823/rannie823.github.io.git/post/ha-ha/</id>
